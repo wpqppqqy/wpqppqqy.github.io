@@ -1,0 +1,21 @@
+html, body
+{
+  height: 100%;
+  margin: 0;
+}
+html
+{
+  background-color: Black;
+  scroll-behavior: smooth;
+  -webkit-background-size: cover; /* 兼容旧版Safari */
+  -moz-background-size: cover;    /* 兼容旧版Firefox */
+  -o-background-size: cover;      /* 兼容旧版Opera */
+  background-size: cover;          /* 核心属性：等比缩放完全覆盖容器 */
+
+}
+body
+{
+  color: White;
+  font-size: 40pt;
+  white-space: nowrap;
+}
