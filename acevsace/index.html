@@ -1,10 +1,116 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN">
   <head>
-	<link href="/css/home.css" rel="stylesheet"/>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>原生粒子背景主页</title>
+<style>
+    * { margin: 0; padding: 0; }
+    body { overflow: hidden; background: # 0a0e27; }
+    /* 粒子画布固定在底层，不遮挡页面内容 */
+
+    #particleCanvas {
+
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: -1;
+    }
+    .content {
+      position: relative;
+      z-index: 1;
+      color: #fff;
+      text-align: center;
+      padding-top: 30vh;
+      font-family: system-ui;
+    }
+</style>
   </head>
   <body>
-	<img src="WHAT.jpg">
-	<video autoplay muted src="what.mp4" controls width="800"/>
+	<canvas id="particleCanvas"></canvas>
+	<div class="content">
+	  <h1>欢迎来到粒子背景主页</h1>
+	  <p>这是完全原生实现的无依赖粒子效果</p>
+	</div>
+
+<script>
+const canvas = document.getElementById('particleCanvas');
+const ctx = canvas.getContext('2d');
+let w = canvas.width = window.innerWidth;
+let h = canvas.height = window.innerHeight;
+const particles = [];
+const particleCount = 120;
+const connectDistance = 80;
+
+// 初始化粒子
+class Particle {
+	constructor() {
+        this.x = Math.random() * w;
+        this.y = Math.random() * h;
+        this.vx = (Math.random() - 0.5) * 0.8;
+        this.vy = (Math.random() - 0.5) * 0.8;
+        this.radius = Math.random() * 2 + 1;
+	}
+	update() {
+        this.x += this.vx;
+        this.y += this.vy;
+        // 边界反弹
+        if (this.x < 0 || this.x > w) this.vx *= -1;
+        if (this.y < 0 || this.y > h) this.vy *= -1;
+	}
+	draw() {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(100, 200, 255, 0.7)';
+        ctx.fill();
+	}
+}
+
+// 生成粒子实例
+for (let i = 0; i < particleCount; i++) {
+	particles.push(new Particle());
+}
+
+// 绘制粒子连线
+function drawLines() {
+	for (let i = 0; i < particles.length; i++) {
+        for (let j = i + 1; j < particles.length; j++) {
+			const dx = particles[i].x - particles[j].x;
+			const dy = particles[i].y - particles[j].y;
+			const dist = Math.sqrt(dx * dx + dy * dy);
+			if (dist < connectDistance)
+			{
+				ctx.beginPath();
+				ctx.strokeStyle = `rgba(100, 200, 255, ${0.2 * (1 - dist / connectDistance)})`;
+				ctx.lineWidth = 0.5;
+				ctx.moveTo(particles[i].x, particles[i].y);
+				ctx.lineTo(particles[j].x, particles[j].y);
+				ctx.stroke();
+			}
+        }
+	}
+}
+
+// 动画循环
+function loop() {
+	ctx.clearRect(0, 0, w, h);
+	particles.forEach(p => {
+        p.update();
+	p.draw();
+});
+drawLines();
+requestAnimationFrame(loop);
+    }
+
+    // 响应式适配
+    window.addEventListener('resize', () => {
+      w = canvas.width = window.innerWidth;
+      h = canvas.height = window.innerHeight;
+    });
+
+    loop();
+</script>
   </body>
 </html>

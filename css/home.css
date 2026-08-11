@@ -1,20 +1,14 @@
-html, body
-{
-  height: 100%;
-  width: 100%;
-  margin: 0;
-}
-html
-{
-  background-color: Black;
-  scroll-behavior: smooth;
-  -webkit-background-size: cover; /* 兼容旧版Safari */
-  -moz-background-size: cover;    /* 兼容旧版Firefox */
-  -o-background-size: cover;      /* 兼容旧版Opera */
-  background-size: cover;          /* 核心属性：等比缩放完全覆盖容器 */
-
-}
-body
-{
-  color: White;
-}
+    .bg-layer {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100vh;
+      z-index: -1;
+      background: linear-gradient(45deg, #ff6b6b, # 04ecdc4, # 044b5b1, #ff6b6b);
+      background-size: 400% 400%;
+      animation: gradientShift 8s ease infinite;
+    }
+    @keyframes gradientShift {
+      0% { background-position: 0 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0 50%; }
+    }
