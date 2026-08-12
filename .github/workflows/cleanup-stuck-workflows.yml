@@ -26,4 +26,4 @@ jobs:
           repository: ${{ github.repository }}
           retain_days: 1  # 保留最近1天的运行记录
           keep_minimum_runs: 3  # 每个工作流至少保留3条最新记录
-          delete_branch_runs: false  # 不删除当前活跃分支的运行记录
+          delete_branch_runs: true  # 不删除当前活跃分支的运行记录
