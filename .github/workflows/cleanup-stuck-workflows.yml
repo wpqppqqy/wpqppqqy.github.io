@@ -4,6 +4,10 @@ on:
     - cron: '0 2 * * *'  # 每日凌晨2点定时执行
   workflow_dispatch:  # 支持手动触发
 
+permissions:
+  actions: write
+  contents: read
+
 jobs:
   cleanup:
     runs-on: ubuntu-latest
@@ -18,7 +22,7 @@ jobs:
 
           delete_stuck_runs: true
           stuck_runs_hours_threshold: 3
-
+          
       - name: 清理过期历史运行记录
         uses: Mattraks/delete-workflow-runs@v2
         with:
@@ -26,4 +30,66 @@ jobs:
           repository: ${{ github.repository }}
           retain_days: 1  # 保留最近1天的运行记录
           keep_minimum_runs: 3  # 每个工作流至少保留3条最新记录
-          delete_branch_runs: true  # 不删除当前活跃分支的运行记录
+          delete_branch_runs: true  # 删除当前活跃分支的运行记录
+          
+      - name: 使用GitHub CLI批量清理
+      run: |
+
+    # 列出所有运行超过35天的卡死任务ID
+
+    gh api repos/${{ github.repository }}/actions/runs --paginate \
+      --jq '.[] | select(.status == "in_progress" and .created_at | fromdateiso8601 < (now - 35*24*3600)) | .id' \
+      | while read run_id; do
+
+          # 强制取消卡死任务
+
+          gh api -X POST /repos/${{ github.repository }}/actions/runs/$run_id/cancel
+
+          # 删除对应的运行记录
+
+          gh api -X DELETE /repos/${{ github.repository }}/actions/runs/$run_id
+        done
+  env:
+    GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: 批量取消所有排队中的任务
+        run: |
+
+          # 获取所有状态为queued的排队任务ID
+
+          gh api repos/$GITHUB_REPOSITORY/actions/runs --paginate -q '.workflow_runs | select(.status=="queued") | .id' | while read RUN_ID; do
+            echo "正在取消排队任务ID: $RUN_ID"
+            gh api repos/$GITHUB_REPOSITORY/actions/runs/$RUN_ID/cancel -X POST
+          done
+
+      - name: 终止所有运行超过2小时的异常任务
+        run: |
+
+          # 计算2小时前的时间戳
+
+          TWO_HOURS_AGO=$(date -d "2 hours ago" -u +"%Y-%m-%dT%H:%M:%SZ")
+
+          # 筛选出运行中且启动时间早于2小时前的任务
+
+          gh api repos/$GITHUB_REPOSITORY/actions/runs --paginate -q --arg time "$TWO_HOURS_AGO" '.workflow_runs | select(.status=="in_progress" and .createdAt < $time) | .id' | while read RUN_ID; do
+            echo "正在终止超时运行任务ID: $RUN_ID"
+            gh api repos/$GITHUB_REPOSITORY/actions/runs/$RUN_ID/cancel -X POST
+
+            # 等待任务完全终止
+
+            sleep 15
+          done
+
+      - name: 自动删除超过7天的历史运行记录
+        run: |
+
+          # 计算7天前的时间戳
+
+          SEVEN_DAYS_AGO=$(date -d "7 days ago" -u +"%Y-%m-%dT%H:%M:%SZ")
+
+          # 筛选出已完成且创建时间超过7天的任务
+
+          gh api repos/$GITHUB_REPOSITORY/actions/runs --paginate -q --arg time "$SEVEN_DAYS_AGO" '.workflow_runs | select(.status!="in_progress" and .createdAt < $time) | .id' | while read RUN_ID; do
+            echo "正在删除历史记录ID: $RUN_ID"
+            gh api repos/$GITHUB_REPOSITORY/actions/runs/$RUN_ID -X DELETE
+          done
