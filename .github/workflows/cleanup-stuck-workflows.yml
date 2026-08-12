@@ -1,0 +1,29 @@
+name: 自动清理卡死工作流与历史记录
+on:
+  schedule:
+    - cron: '0 2 * * *'  # 每日凌晨2点定时执行
+  workflow_dispatch:  # 支持手动触发
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 终止所有卡死的运行任务
+        uses: Mattraks/delete-workflow-runs@v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          repository: ${{ github.repository }}
+
+          # 强制取消运行时长超过3小时的卡死任务
+
+          delete_stuck_runs: true
+          stuck_runs_hours_threshold: 3
+
+      - name: 清理过期历史运行记录
+        uses: Mattraks/delete-workflow-runs@v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          repository: ${{ github.repository }}
+          retain_days: 1  # 保留最近1天的运行记录
+          keep_minimum_runs: 3  # 每个工作流至少保留3条最新记录
+          delete_branch_runs: false  # 不删除当前活跃分支的运行记录
