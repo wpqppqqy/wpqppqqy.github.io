@@ -45,16 +45,16 @@ jobs:
             sleep 15
           done
 
-      - name: 3. 自动删除超过7天的历史运行记录
+      - name: 3. 自动删除超过1天的历史运行记录
         run: |
 
-          # 计算7天前的时间戳
+          # 计算1天前的时间戳
 
-          SEVEN_DAYS_AGO=$(date -d "7 days ago" -u +"%Y-%m-%dT%H:%M:%SZ")
+          ONE_DAYS_AGO=$(date -d "1 days ago" -u +"%Y-%m-%dT%H:%M:%SZ")
 
-          # 筛选出已完成且创建时间超过7天的任务
+          # 筛选出已完成且创建时间超过1天的任务
 
-          gh api repos/$GITHUB_REPOSITORY/actions/runs --paginate -q --arg time "$SEVEN_DAYS_AGO" '.workflow_runs | select(.status!="in_progress" and .createdAt < $time) | .id' | while read RUN_ID; do
+          gh api repos/$GITHUB_REPOSITORY/actions/runs --paginate -q --arg time "$ONE_DAYS_AGO" '.workflow_runs | select(.status!="in_progress" and .createdAt < $time) | .id' | while read RUN_ID; do
             echo "正在删除历史记录ID: $RUN_ID"
             gh api repos/$GITHUB_REPOSITORY/actions/runs/$RUN_ID -X DELETE
           done
