@@ -500,7 +500,7 @@ AddLanguage('ZH-CN','chinese',{
 		"%1 个使者",
 		"%1 个使者"
 	],
-	"Heralds couldn't be loaded. There may be an issue with our servers, or you are playing the game locally.": "无法加载使用。这可能是因为我们的服务器出现了问题，或者你是在本地完游戏。",
+	"Heralds couldn't be loaded. There may be an issue with our servers, or you are playing the game locally.": "无法加载使用。这可能是因为我们的服务器出现了问题，或者你是在本地玩游戏。",
 	"There are no heralds at the moment. Please consider <b>donating to our Patreon</b>!": "当前没有使者。请考虑<b>向我们的 Patreon 捐赠</b>！",
 	"selflessly inspiring a boost in production for everyone, resulting in %1.": "这种无私的行为可以使每个人的饼干产量提高 %1。",
 	"+%1% cookies per second": "每秒饼干产量 +%1%",
