@@ -35,7 +35,7 @@ class Particle {
     draw() {
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(${param.get('rgba') ?? params.get('rgba') ?? '100, 200, 255, 0.7'})`;
+        ctx.fillStyle = `rgba(${params.get('rgba') ?? '100, 200, 255, 0.7'})`;
         ctx.fill();
     }
 }
@@ -52,8 +52,8 @@ function drawLines() {
             const dist = Math.sqrt(dx * dx + dy * dy);
             if (dist < connectDistance) {
                 ctx.beginPath();
-                ctx.strokeStyle = `rgba(${param.get('rgb') ?? params.get('rgb') ?? '100, 200, 255'}, ${(param.get('a') ?? params.get('a') ?? 0.2) * (1 - dist / connectDistance)})`;
-                ctx.lineWidth = param.get('width') ?? params.get('width') ?? 0.5;
+                ctx.strokeStyle = `rgba(${params.get('rgb') ?? '100, 200, 255'}, ${(params.get('a') ?? 0.2) * (1 - dist / connectDistance)})`;
+                ctx.lineWidth = params.get('width') ?? 0.5;
                 ctx.moveTo(particles[i].x, particles[i].y);
                 ctx.lineTo(particles[j].x, particles[j].y);
                 ctx.stroke();
