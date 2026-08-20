@@ -46,9 +46,8 @@ const speed = getParamNumber('speed', 0.4);
 const min = getParamNumber('min', 1);
 const max = getParamNumber('max', 3);
 const lineWidth = getParamNumber('width', 1);
-const baseAlpha = getParamNumber('a', 0.4);
-const colorParam = getParamString('rgba', '255,255,255,1');
-const colorLine = getParamString('rgb', '255,255,255')
+const colorParticle = getParamString('particle', '255,255,255,1');
+const colorLine = getParamString('line', '255,255,255,1')
 
 function parseColor(c) {
     const parts = c.split(',').map(s => s.trim());
@@ -59,7 +58,7 @@ function parseColor(c) {
         a: parts[3] ?? '1'
     };
 }
-const baseColor = parseColor(colorParam);
+const particleColor = parseColor(colorParticle);
 const lineColor = parseColor(colorLine)
 let w = canvas.width / DPR;
 let h = canvas.height / DPR;
@@ -96,7 +95,7 @@ class Particle {
     draw() {
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(${baseColor.r}, ${baseColor.g}, ${baseColor.b}, ${baseColor.a})`;
+        ctx.fillStyle = `rgba(${particleColor.r}, ${particleColor.g}, ${particleColor.b}, ${particleColor.a})`;
         ctx.fill();
     }
 }
@@ -110,7 +109,7 @@ function drawLines() {
             const dy = particles[i].y - particles[j].y;
             const dist = Math.sqrt(dx * dx + dy * dy);
             if (dist < connectDistance) {
-                ctx.strokeStyle = `rgba(${lineColor.r}, ${lineColor.g}, ${lineColor.b}, ${baseAlpha * (1 - dist / connectDistance)})`;
+                ctx.strokeStyle = `rgba(${lineColor.r}, ${lineColor.g}, ${lineColor.b}, ${lineColor.a * (1 - dist / connectDistance)})`;
                 ctx.beginPath();
                 ctx.moveTo(particles[i].x, particles[i].y);
                 ctx.lineTo(particles[j].x, particles[j].y);
