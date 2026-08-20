@@ -56,7 +56,7 @@ function parseColor(c) {
         r: parts[0] ?? '255',
         g: parts[1] ?? '255',
         b: parts[2] ?? '255',
-        a: parts[3]
+        a: parts[3] ?? '1'
     };
 }
 const baseColor = parseColor(colorParam);
@@ -96,7 +96,7 @@ class Particle {
     draw() {
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(${baseColor.r}, ${baseColor.g}, ${baseColor.b}, ${baseColor.a ?? 1})`;
+        ctx.fillStyle = `rgba(${baseColor.r}, ${baseColor.g}, ${baseColor.b}, ${baseColor.a})`;
         ctx.fill();
     }
 }
