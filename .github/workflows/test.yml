@@ -1,0 +1,22 @@
+name: 临时清理历史记录
+on:
+  workflow_dispatch: # 仅支持手动点击触发，不会自动运行
+
+jobs:
+  clean-target-wkf:
+    runs-on: ubuntu-latest
+    permissions:
+      actions: write
+      contents: read
+    steps:
+      - name: 执行指定工作流记录清理
+        uses: Mattraks/delete-workflow-runs@v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          repository: ${{ github.repository }}
+
+          # 核心配置：仅匹配你指定的单个工作流名称，其他工作流完全不受影响
+
+          workflow_name: "pages-build-deployment"
+          retain_days: 0 # 0代表删除该工作流所有历史记录，也可以填数字保留最近N天记录
+          keep_minimum_runs: 0 # 0代表不保留任何历史记录，也可以填数字保留最近N条运行记录
