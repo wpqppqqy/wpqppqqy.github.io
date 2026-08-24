@@ -2,3 +2,5 @@
 # **关于**
 存放个人主页和其他网站
 https://wpqppqqy.github.io/
+---
+**Copyright (C) 2026 wpqppqqy. All Rights Reserved.**
