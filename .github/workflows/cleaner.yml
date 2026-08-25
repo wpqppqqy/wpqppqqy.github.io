@@ -13,6 +13,6 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           repository: ${{ github.repository }}
-          workflow_patterns: "你的目标工作流文件名.yml" # 精准指定要清理的工作流
+          workflow_patterns: "" # 精准指定要清理的工作流
           retain_days: 0 # 删除7天前的旧记录
           keep_minimum_runs: 1 # 至少保留最近3条运行记录
