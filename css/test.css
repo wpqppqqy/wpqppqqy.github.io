@@ -1,0 +1,361 @@
+* {
+    margin: 0;
+    /* 清除所有元素默认外边距 */
+    padding: 0;
+    /* 清除所有元素默认内边距 */
+    box-sizing: border-box;
+    /* 宽高包含内边距和边框，布局计算更直观 */
+}
+
+body {
+    /* 定义背景：135度渐变，起点颜色#0667eea，终点颜色# 0764ba */
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    font-family: system-ui;
+    /* 使用系统默认无衬线字体，适配不同设备 */
+    min-height: 100vh;
+    /* 最小高度占满整个视口，保证背景铺满 */
+    padding-top: 70px;
+    /* 顶部留白，避开fixed定位的导航栏 */
+}
+
+/* 网站顶部导航栏 */
+header.site-header {
+    position: fixed;
+    /* 固定定位，滚动时停留在屏幕顶部 */
+    top: 0;
+    /* 对齐屏幕顶部 */
+    left: 0;
+    /* 对齐屏幕左侧 */
+    width: 100%;
+    /* 宽度占满整个屏幕 */
+    height: 64px;
+    /* 导航栏固定高度 */
+    /* 半透明白色背景，实现毛玻璃基础效果 */
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    /* 背景模糊，实现毛玻璃效果 */
+    /* 底部阴影，增加导航栏悬浮层次感 */
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+    display: flex;
+    /* 使用flex布局实现内容垂直水平居中 */
+    align-items: center;
+    /* 子元素垂直居中对齐 */
+    justify-content: space-between;
+    /* 子元素两端对齐，产生间距 */
+    padding: 0 20px;
+    /* 左右内边距，避免内容贴边 */
+    z-index: 1000;
+    /* 层级置顶，保证导航栏不被其他元素遮挡 */
+}
+
+/* 导航栏标题文字 */
+.header-title {
+    font-size: 1.3rem;
+    /* 标题字号 */
+    font-weight: 600;
+    /* 半粗字重，突出标题 */
+    color: #2d3748;
+    /* 标题文字颜色 */
+}
+
+/* 侧边栏展开按钮（汉堡按钮） */
+.hamburger-btn {
+    width: 36px;
+    /* 按钮宽度 */
+    height: 28px;
+    /* 按钮高度 */
+    position: relative;
+    /* 相对定位，给内部span做定位基准 */
+    background: transparent;
+    /* 透明背景，只显示三条杠 */
+    border: none;
+    /* 去掉按钮默认边框 */
+    cursor: pointer;
+    /* 鼠标悬浮变为手型，提示可点击 */
+    outline: none;
+    /* 去掉点击默认外轮廓 */
+}
+
+/* 汉堡按钮的三条横杠 */
+.hamburger-btn span {
+    position: absolute;
+    /* 绝对定位，自由调整三条杠位置 */
+    left: 0;
+    /* 对齐按钮左侧 */
+    width: 100%;
+    /* 横杠宽度占满按钮 */
+    height: 4px;
+    /* 横杠高度 */
+    background-color: #2d3748;
+    /* 横杠颜色 */
+    border-radius: 2px;
+    /* 圆角收边，更美观 */
+    transition: all 0.3s ease;
+    /* 所有属性变化添加0.3秒缓动动画 */
+}
+
+.hamburger-btn span:nth-child(1) {
+    top: 0;
+    /* 第一条横杠靠顶部 */
+}
+
+.hamburger-btn span:nth-child(2) {
+    top: 50%;
+    /* 第二条横杠垂直居中 */
+    transform: translateY(-50%);
+    /* 精准居中，修正偏移 */
+}
+
+.hamburger-btn span:nth-child(3) {
+    bottom: 0;
+    /* 第三条横杠靠底部 */
+}
+
+/* 展开状态的汉堡按钮：三条杠变叉号 */
+.hamburger-btn.active span:nth-child(1) {
+    top: 50%;
+    /* 移动到垂直居中位置 */
+    transform: rotate(45deg) translateY(-50%);
+    /* 顺时针旋转45度 */
+}
+
+.hamburger-btn.active span:nth-child(2) {
+    opacity: 0;
+    /* 中间横杠透明隐藏 */
+}
+
+.hamburger-btn.active span:nth-child(3) {
+    bottom: 50%;
+    /* 移动到垂直居中位置 */
+    transform: rotate(-45deg) translateY(50%);
+    /* 逆时针旋转45度 */
+}
+
+/* 侧滑侧边菜单 */
+.sidebar-menu {
+    position: fixed;
+    /* 固定定位，滚动时位置不变 */
+    top: 64px;
+    /* 顶部紧贴导航栏下方 */
+    left: -280px;
+    /* 默认向左移出屏幕，隐藏菜单 */
+    width: 280px;
+    /* 侧边栏固定宽度 */
+    height: calc(100vh - 64px);
+    /* 高度占满导航栏以下的视口 */
+    background: rgba(255, 255, 255, 0.98);
+    /* 近乎不透明的白色背景 */
+    /* 右侧阴影，突出侧边栏悬浮效果 */
+    box-shadow: 2px 0 12px rgba(0, 0, 0, 0.15);
+    transition: left 0.3s ease;
+    /* 位置变化添加缓动动画，实现平滑侧滑 */
+    z-index: 999;
+    /* 层级仅低于导航栏 */
+    padding: 20px 0;
+    /* 上下内边距，给菜单项留出空间 */
+}
+
+/* 激活状态：侧边栏滑入屏幕 */
+.sidebar-menu.active {
+    left: 0;
+    /* 左侧对齐屏幕，完全显示菜单 */
+}
+
+/* 侧边栏菜单项 */
+.menu-item {
+    display: block;
+    /* 块级元素，独占一行可点击范围更大 */
+    padding: 14px 24px;
+    /* 上下左右内边距，扩大点击热区 */
+    color: #2d3748;
+    /* 菜单项文字颜色 */
+    text-decoration: none;
+    /* 去掉链接默认下划线 */
+    font-size: 1.05rem;
+    /* 菜单项字号 */
+    transition: background 0.2s;
+    /* 背景变化添加过渡动效 */
+}
+
+/* 菜单项悬浮效果 */
+.menu-item:hover {
+    background: #f7fafc;
+    /* 悬浮时背景变浅灰，提示交互 */
+}
+
+/* 菜单项分隔线 */
+.menu-divider {
+    height: 1px;
+    /* 分隔线高度 */
+    background: #e2e8f0;
+    /* 分隔线浅灰颜色 */
+    margin: 8px 16px;
+    /* 分隔线外边距，和上下菜单项留出间距 */
+}
+
+/* 侧边栏展开时的背景遮罩 */
+.mask {
+    position: fixed;
+    /* 固定定位，铺满整个屏幕 */
+    top: 64px;
+    /* 顶部从导航栏下方开始 */
+    left: 0;
+    /* 对齐屏幕左侧 */
+    width: 100vw;
+    /* 宽度占满整个视口 */
+    height: 100vh;
+    /* 高度占满整个视口 */
+    background: rgba(0, 0, 0, 0.4);
+    /* 半透黑背景，突出侧边栏 */
+    opacity: 0;
+    /* 默认透明 */
+    visibility: hidden;
+    /* 默认隐藏，不阻挡交互 */
+    transition: all 0.3s ease;
+    /* 透明度变化添加过渡 */
+    z-index: 998;
+    /* 层级低于侧边栏，高于主内容 */
+}
+
+/* 激活状态：遮罩显示 */
+.mask.active {
+    opacity: 1;
+    /* 不透明 */
+    visibility: visible;
+    /* 显示，阻挡主内容交互 */
+}
+
+/* 主内容容器 */
+.container {
+    max-width: 1100px;
+    /* 大屏下最大宽度限制，避免内容过宽 */
+    width: 92%;
+    /* 小屏下左右留8%边距，不贴边 */
+    margin: 30px auto 60px;
+    /* 上下外边距，左右自动居中 */
+}
+
+/* 页面标题区域 */
+.page-title {
+    text-align: center;
+    /* 文字居中 */
+    color: white;
+    /* 标题文字白色，适配蓝紫渐变背景 */
+    margin-bottom: 40px;
+    /* 底部外边距，和下方内容分隔 */
+}
+
+.page-title h1 {
+    font-size: 2.2rem;
+    /* 主标题字号 */
+    margin-bottom: 8px;
+    /* 底部间距，和副标题分隔 */
+}
+
+.page-title p {
+    font-size: 1.1rem;
+    /* 副标题字号 */
+    opacity: 0.9;
+    /* 透明度降低，弱化突出主标题 */
+    font-weight: 300;
+    /* 细字重，更轻盈 */
+}
+
+/* 导航卡片分组容器 */
+.card-group {
+    margin-bottom: 40px;
+    /* 分组底部间距，分隔不同分组 */
+}
+
+/* 分组标题 */
+.group-title {
+    color: white;
+    /* 标题颜色白色适配背景 */
+    font-size: 1.4rem;
+    /* 标题字号 */
+    margin-bottom: 20px;
+    /* 底部间距，和卡片分隔 */
+    padding-left: 10px;
+    /* 左侧内边距，给左边框留出空间 */
+    border-left: 4px solid white;
+    /* 左侧白色标识线，突出分组 */
+}
+
+/* 卡片网格容器 */
+.card-grid {
+    display: grid;
+    /* 网格布局，实现响应式卡片排列 */
+    /* 自动适配列宽，最小列宽220px，宽屏自动增加列数 */
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+    /* 卡片之间的行间距和列间距 */
+}
+
+/* 导航卡片 */
+.nav-card {
+    background: white;
+    /* 卡片白色背景 */
+    border-radius: 12px;
+    /* 大圆角，风格更柔和 */
+    padding: 24px 20px;
+    /* 卡片内边距，避免内容贴边 */
+    text-decoration: none;
+    /* 去掉链接默认下划线 */
+    color: #2d3748;
+    /* 卡片标题文字颜色 */
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    /* 阴影增加悬浮感 */
+    transition: all 0.3s ease;
+    /* 所有变化添加过渡，hover动效更平滑 */
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    /* 浅色边框提升精致感 */
+}
+
+/* 卡片悬浮效果 */
+.nav-card:hover {
+    transform: translateY(-6px);
+    /* 向上平移6px，产生上浮动效 */
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.15);
+    /* 阴影变大，强化悬浮感 */
+}
+
+.nav-card h3 {
+    font-size: 1.25rem;
+    /* 卡片标题字号 */
+    margin-bottom: 8px;
+    /* 底部间距，和描述文字分隔 */
+}
+
+.nav-card p {
+    font-size: 0.9rem;
+    /* 描述文字字号 */
+    color: #718096;
+    /* 浅灰色文字，弱化突出标题 */
+    line-height: 1.5;
+    /* 行高1.5倍，提升可读性 */
+}
+
+/* 页面页脚 */
+footer {
+    text-align: center;
+    /* 文字居中 */
+    color: rgba(255, 255, 255, 0.8);
+    /* 半透明白色，弱化页脚 */
+    padding-bottom: 40px;
+    /* 底部内边距，留出留白 */
+    font-size: 0.9rem;
+    /* 页脚字号 */
+}
+
+/* 移动端（屏幕宽度≤480px）适配规则 */
+@media (max-width:480px) {
+    .page-title h1 {
+        font-size: 1.8rem;
+        /* 缩小主标题字号，适配小屏 */
+    }
+
+    .card-grid {
+        grid-template-columns: 1fr;
+        /* 小屏下改为单列排列 */
+    }
+}
