@@ -11,6 +11,10 @@ body {
     padding-top: 70px
 }
 
+#particleCanvas {
+    padding-top: 64px
+}
+
 header.site-header {
     position: fixed;
     top: 0;
