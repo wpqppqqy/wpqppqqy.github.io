@@ -1,4 +1,4 @@
-const MIN_SHOW_TIME = 500;
+const MIN_SHOW_TIME = 0;
 const pageStartTime = Date.now();
 let isPageLoaded = false;
 window.addEventListener('load', () => {
@@ -14,6 +14,6 @@ window.addEventListener('load', () => {
 function hidePreloader() {
     const preloader = document.getElementById('preloader');
     preloader.classList.add('hidden');
-document.querySelector('.header-center').classList.add('move');
-    setTimeout(() => preloader.remove(), 600);
+    setTimeout(() => document.querySelector('.header-center').classList.add('move'), 500);
+    setTimeout(() => preloader.remove(), 500);
 }

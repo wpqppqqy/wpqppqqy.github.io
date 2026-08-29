@@ -27,8 +27,8 @@
 }
 
 .circle {
-    width: 100px;
-    height: 100px;
+    width: 80px;
+    height: 80px;
     border: 10px solid #7f151515;
     border-top-color: #2d3748;
     border-radius: 50%;

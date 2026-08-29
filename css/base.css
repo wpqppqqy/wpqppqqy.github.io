@@ -26,11 +26,13 @@ header.header {
 }
 
 .header-center {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
     transform: translateY(43.5vh);
     font-size: 1.3rem;
     font-weight: 600;
     color: #2d3748;
-    flex: 1;
     text-align: center;
     opacity: 1;
     transition: all 0.3s ease;
