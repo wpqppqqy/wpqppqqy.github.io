@@ -11,30 +11,33 @@ body {
     padding-top: 64px;
 }
 
-#particleCanvas {
-    padding: 64px 0;
-}
-
 header.site-header {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 64px;
-    background: #000000;
-    backdrop-filter: blur(10px);
-    box-shadow: 0 2px 12px #000000;
+    background: transparent;
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: center;
     padding: 0 20px;
     z-index: 1000;
 }
 
-.header-title {
+.header-center {
     font-size: 1.3rem;
     font-weight: 600;
     color: #2d3748;
+    flex: 1;
+    text-align: center;
+    opacity: 1;
+    transition: all 0.3s ease;
+}
+
+.header-center.hidden {
+    opacity: 0;
+    transform: translateY(-20px);
 }
 
 .container {
@@ -84,14 +87,12 @@ header.site-header {
     padding: 24px 20px;
     text-decoration: none;
     color: #2d3748;
-    box-shadow: 0 4px 16px #000000;
     transition: all 0.3s ease;
     border: 1px solid #ffffff;
 }
 
 .nav-card:hover {
     transform: translateY(-6px);
-    box-shadow: 0 10px 24px #000000;
 }
 
 .nav-card h3 {
@@ -115,9 +116,7 @@ footer.site-footer {
     left: 0;
     width: 100%;
     height: 64px;
-    background: #000000;
-    backdrop-filter: blur(10px);
-    box-shadow: 0 2px 12px #000000;
+    background: transparent;
     display: flex;
     align-items: center;
     justify-content: space-between;
