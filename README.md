@@ -3,4 +3,4 @@
 存放个人主页和其他网站
 https://wpqppqqy.github.io/
 ---
-**© 2026 奇迹蛋糕 (Github: @wpqppqqy). All Rights Reserved.**
+**© 2026 [奇迹蛋糕](https://wpqppqqy.github.io/) (Github: [@wpqppqqy](https://github.com/wpqppqqy)). All Rights Reserved.**
