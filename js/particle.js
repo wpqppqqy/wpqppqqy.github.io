@@ -59,7 +59,7 @@ function parseColor(c) {
     };
 }
 const particleColor = parseColor(colorParticle);
-const lineColor = parseColor(colorLine)
+const lineColor = parseColor(colorLine);
 let w = canvas.width / DPR;
 let h = canvas.height / DPR;
 const particles = [];
