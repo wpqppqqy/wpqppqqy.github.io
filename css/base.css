@@ -1,18 +1,18 @@
 * {
     margin: 0;
     padding: 0;
-    box-sizing: border-box
+    box-sizing: border-box;
 }
 
 body {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     font-family: system-ui;
     min-height: 100vh;
-    padding-top: 64px
+    padding-top: 64px;
 }
 
 #particleCanvas {
-    padding-top: 64px
+    padding: 64px 0;
 }
 
 header.site-header {
@@ -21,103 +21,116 @@ header.site-header {
     left: 0;
     width: 100%;
     height: 64px;
-    background: rgba(255, 255, 255, 0.95);
+    background: #000000;
     backdrop-filter: blur(10px);
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 12px #000000;
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 0 20px;
-    z-index: 1000
+    z-index: 1000;
 }
 
 .header-title {
     font-size: 1.3rem;
     font-weight: 600;
-    color: #2d3748
+    color: #2d3748;
 }
 
 .container {
     max-width: 1100px;
     width: 92%;
-    margin: 30px auto 60px
+    margin: 30px auto 60px;
 }
 
 .page-title {
     text-align: center;
-    color: white;
-    margin-bottom: 40px
+    color: #ffffff;
+    margin-bottom: 40px;
 }
 
 .page-title h1 {
     font-size: 2.2rem;
-    margin-bottom: 8px
+    margin-bottom: 8px;
 }
 
 .page-title p {
     font-size: 1.1rem;
     opacity: 0.9;
-    font-weight: 300
+    font-weight: 300;
 }
 
 .card-group {
-    margin-bottom: 40px
+    margin-bottom: 40px;
 }
 
 .group-title {
-    color: white;
+    color: #ffffff;
     font-size: 1.4rem;
     margin-bottom: 20px;
     padding-left: 10px;
-    border-left: 4px solid white
+    border-left: 4px solid #ffffff;
 }
 
 .card-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 20px
+    gap: 20px;
 }
 
 .nav-card {
-    background: white;
+    background: #000000;
     border-radius: 12px;
     padding: 24px 20px;
     text-decoration: none;
     color: #2d3748;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 16px #000000;
     transition: all 0.3s ease;
-    border: 1px solid rgba(255, 255, 255, 0.2)
+    border: 1px solid #ffffff;
 }
 
 .nav-card:hover {
     transform: translateY(-6px);
-    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.15)
+    box-shadow: 0 10px 24px #000000;
 }
 
 .nav-card h3 {
     font-size: 1.25rem;
-    margin-bottom: 8px
+    margin-bottom: 8px;
 }
 
 .nav-card p {
     font-size: 0.9rem;
     color: #718096;
-    line-height: 1.5
+    line-height: 1.5;
 }
 
-footer {
+footer.site-footer {
+    position: relative;
     text-align: center;
-    color: rgba(255, 255, 255, 0.8);
+    color: #2d3748;
     padding-bottom: 40px;
-    font-size: 0.9rem
+    font-size: 0.9rem;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 64px;
+    background: #000000;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 2px 12px #000000;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+    z-index: 1000;
 }
 
 @media (max-width:480px) {
     .page-title h1 {
-        font-size: 1.8rem
+        font-size: 1.8rem;
     }
 
     .card-grid {
-        grid-template-columns: 1fr
+        grid-template-columns: 1fr;
     }
 }
