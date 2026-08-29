@@ -1,17 +1,19 @@
-window.addEventListener('load', function() {
-    const loadingEl = document.getElementById('loading');
-    loadingEl.style.transition = 'opacity 0.4s ease';
-    loadingEl.style.opacity = '0';
-    document.body.style.opacity = '1';
-    setTimeout(() => {
-        loadingEl.remove();
-    }, 400);
-});
-setTimeout(() => {
-    const loadingEl = document.getElementById('loading');
-    if (loadingEl) {
-        loadingEl.style.opacity = '0';
-        document.body.style.opacity = '1';
-        setTimeout(() => loadingEl.remove(), 400);
+const MIN_SHOW_TIME = 500;
+const pageStartTime = Date.now();
+let isPageLoaded = false;
+window.addEventListener('load', () => {
+    isPageLoaded = true;
+    const timePassed = Date.now() - pageStartTime;
+    if (timePassed < MIN_SHOW_TIME) {
+        setTimeout(hidePreloader, MIN_SHOW_TIME - timePassed);
+    } else {
+        hidePreloader();
     }
-}, 8000);
+});
+
+function hidePreloader() {
+    const preloader = document.getElementById('preloader');
+    preloader.classList.add('hidden');
+document.querySelector('.header-center').classList.add('move');
+    setTimeout(() => preloader.remove(), 600);
+}

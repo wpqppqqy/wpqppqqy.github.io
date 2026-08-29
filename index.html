@@ -5,19 +5,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>首页</title>
-    <link rel="preload" href="js/loading.js" as="script">
     <link href="css/loading.css" rel="stylesheet">
     <link href="css/base.css" rel="stylesheet">
 </head>
 
 <body>
-    <div id="loading">
-        <div id="loadings"></div>
+    <div id="preloader">
+        <div class="circle"></div>
     </div>
-    <canvas id="particleCanvas"></canvas>
-    <header class="site-header">
-        <div class="header-center"></div>
+    <header class="header">
+        <div class="header-center"><p>HOME</p></div>
     </header>
+    <canvas id="particleCanvas"></canvas>
     <main class="container">
         <div class="page-title">
             <h1>首页</h1>
@@ -49,7 +48,7 @@
             </div>
         </section>
     </main>
-    <footer class="site-footer">
+    <footer class="footer">
         <p><strong>© 2026 奇迹蛋糕. All Rights Reserved.</strong></p>
     </footer>
     <script src="js/particle.js?id=particleCanvas"></script>
