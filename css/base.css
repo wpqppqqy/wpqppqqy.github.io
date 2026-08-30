@@ -102,29 +102,15 @@ header.header {
     gap: 20px;
 }
 
-.nav-card {
-    background: #000000;
-    border-radius: 12px;
-    padding: 24px 20px;
-    text-decoration: none;
-    color: #2d3748;
-    transition: all 0.3s ease;
-    border: 1px solid #ffffff;
+.card-flex {
+    display: flex;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
 }
 
-.nav-card:hover {
-    transform: translateY(-6px);
-}
-
-.nav-card h3 {
-    font-size: 1.25rem;
-    margin-bottom: 8px;
-}
-
-.nav-card p {
-    font-size: 0.9rem;
-    color: #718096;
-    line-height: 1.5;
+.card-img {
+    width: 30px;
+    height: 30px;
 }
 
 footer.footer {
