@@ -95,7 +95,10 @@ function renderPostList(page) {
         const createDate = new Date(post.created_at).toLocaleString('zh-CN');
         postEl.innerHTML = `
             <div class="post-title">${post.title}</div>
-            <div class="post-meta">发布于 ${createDate}</div>
+            <div class="post-meta">
+            <spon>${post.user.login}</spon>
+            <spom>发布于 ${createDate}</spon>
+            </div>
         `;
         postEl.addEventListener('click', () => renderSinglePost(post));
         contentEl.appendChild(postEl);
