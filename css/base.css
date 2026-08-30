@@ -48,10 +48,17 @@ header.header {
 }
 
 .header-center {
-    font-size: 1.3rem;
+    pfont-size: 1.3rem;
     font-weight: 600;
     color: #2d3748;
     text-align: center;
+    opacity: 1;
+    transition: all 0.3s ease;
+}
+
+.header-center.hidden {
+    opacity: 0;
+    transform: translateY(-20px);
 }
 
 .container {
