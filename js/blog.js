@@ -1,15 +1,15 @@
-// 替换为你自己的GitHub用户名和目标仓库名
-const REPO_OWNER = "wpqppqqy";
-const REPO_NAME = "wpqppqqy.github.io";
+// 替换为你自己的仓库信息
+const REPO_OWNER = 'wpqppqqy';
+const REPO_NAME = 'wpqppqqy.github.io';
 
-// 递归拉取全部Discussions，自动处理分页
+// 递归分页拉取所有Discussions，无需Token
 async function fetchAllDiscussions() {
-    const allDiscussions = [];
+    let allDiscussions = [];
     let endCursor = null;
     let hasNextPage = true;
 
     while (hasNextPage) {
-        // 构造GraphQL查询语句，单次最多拉取100条，支持获取标题、正文、分类、创建时间等全量字段
+        // 构造GraphQL查询，单次最多拉取100条
         const query = `
       query {
         repository(owner: "${REPO_OWNER}", name: "${REPO_NAME}") {
@@ -19,22 +19,15 @@ async function fetchAllDiscussions() {
             orderBy: {field: CREATED_AT, direction: DESC}
           ) {
             nodes {
-              id
               title
               number
               url
               bodyHTML // 直接返回渲染好的HTML内容，无需额外解析Markdown
               createdAt
-              category {
-                name
-                slug
-              }
               labels(first: 10) {
-                nodes {
-                  name
-                  color
-                }
+                nodes { name }
               }
+              category { name }
             }
             pageInfo {
               endCursor
@@ -45,11 +38,11 @@ async function fetchAllDiscussions() {
       }
     `;
 
-        // 无Token直接请求公开接口
-        const res = await fetch("https://api.github.com/graphql", {
-            method: "POST",
+        // 匿名发起请求，不携带任何Token
+        const res = await fetch('https://api.github.com/graphql', {
+            method: 'POST',
             headers: {
-                "Content-Type": "application/json"
+                'Content-Type': 'application/json'
             },
             body: JSON.stringify({
                 query
@@ -57,32 +50,36 @@ async function fetchAllDiscussions() {
         });
 
         const data = await res.json();
-        const discussionsPage = data.data.repository.discussions;
-        allDiscussions.push(...discussionsPage.nodes);
+        const discussions = data.data.repository.discussions;
+        allDiscussions.push(...discussions.nodes);
 
-        // 更新分页状态，拉取下一页
-        hasNextPage = discussionsPage.pageInfo.hasNextPage;
-        endCursor = discussionsPage.pageInfo.endCursor;
+        // 更新分页状态
+        endCursor = discussions.pageInfo.endCursor;
+        hasNextPage = discussions.pageInfo.hasNextPage;
     }
 
     return allDiscussions;
 }
 
-// 调用示例：拉取内容后渲染到页面
-fetchAllDiscussions().then(discussions => {
-    console.log("拉取到的全部博客内容：", discussions);
-    // 在这里编写自定义渲染逻辑，把discussions数组渲染成你想要的博客列表样式
-    const blogContainer = document.getElementById("blog-list");
-    blogContainer.innerHTML = discussions.map(post => `
-    <article class="blog-post">
+// 将拉取到的Discussions渲染为博客列表
+async function renderBlogPage() {
+    const postsContainer = document.getElementById('blog-posts');
+    const discussions = await fetchAllDiscussions();
+
+    discussions.forEach(post => {
+        const postEl = document.createElement('article');
+        postEl.className = 'blog-card';
+        postEl.innerHTML = `
       <h2><a href="${post.url}" target="_blank">${post.title}</a></h2>
       <div class="meta">
+        <span>发布于：${new Date(post.createdAt).toLocaleDateString()}</span>
         <span>分类：${post.category.name}</span>
-        <span>发布时间：${new Date(post.createdAt).toLocaleDateString()}</span>
       </div>
-      <div class="content">${post.bodyHTML}</div>
-    </article>
-  `).join("");
-}).catch(err => {
-    console.error("拉取Discussions失败：", err);
-});
+      <div class="content">${post.bodyHTML.slice(0, 300)}...</div>
+    `;
+        postsContainer.appendChild(postEl);
+    });
+}
+
+// 页面加载完成后自动执行
+document.addEventListener('DOMContentLoaded', renderBlogPage);
