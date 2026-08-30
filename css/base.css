@@ -105,12 +105,14 @@ header.header {
 .card-flex {
     display: flex;
     grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 10px;
+    gap: 5px;
+    align-items: center;
+    justify-content: center;
 }
 
 .card-flex img {
-    width: 30px;
-    height: 30px;
+    width: 60px;
+    height: 60px;
     border-radius: 50%;
 }
 
