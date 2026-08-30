@@ -96,8 +96,9 @@ function renderPostList(page) {
         postEl.innerHTML = `
             <div class="post-title">${post.title}</div>
             <div class="post-meta">
-            <spon>${post.user.login}</spon>
-            <spom>发布于 ${createDate}</spon>
+              <img class="author-avatar" src="${post.user.avatar_url}" alt="${post.user.login}">
+              <spon>${post.user.login}</spon>
+              <spom>发布于 ${createDate}</spon>
             </div>
         `;
         postEl.addEventListener('click', () => renderSinglePost(post));
@@ -153,6 +154,7 @@ function renderSinglePost(post) {
     contentEl.innerHTML = `
     <h2 class="post-title">${post.title}</h2>
     <div class="post-meta">
+      <img class="author-avatar" src="${post.user.avatar_url}" alt="${post.user.login}">
       <span>${post.user.login}</span>
       <span>发布于 ${createDate}</span>
     </div>

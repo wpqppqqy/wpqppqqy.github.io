@@ -10,14 +10,14 @@
     left: 0;
     width: 100vw;
     height: 100vh;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: #000000;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     z-index: 100;
     font-family: system-ui, sans-serif;
-    color: #2d3748;
+    color: #ffffff;
     transition: opacity 0.6s ease;
 }
 
@@ -30,7 +30,7 @@
     width: 80px;
     height: 80px;
     border: 10px solid #7f151515;
-    border-top-color: #2d3748;
+    border-top-color: #ffffff;
     border-radius: 50%;
     animation: spin 1s linear infinite;
     margin-bottom: 20px
