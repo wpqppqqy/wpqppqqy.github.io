@@ -2,28 +2,149 @@
 <html lang="zh-CN">
 
 <head>
-    <!-- 基础页面配置 -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blog</title>
-    <link href="../css/base.css" rel="stylesheet">
-    <link href="../css/blog.css" rel="stylesheet">
+    <title>基于Discussions的静态博客</title>
+    <style>
+        * {margin: 0; padding: 0; box-sizing: border-box;}
+        body {max-width: 900px; margin: 0 auto; padding: 2rem 1rem; font-family: system-ui, -apple-system, sans-serif; line-height: 1.6; color: # 0333;}
+        .blog-list .item {padding: 1.2rem 0; border-bottom: 1px solid #eee;}
+        .blog-list .item:last-child {border-bottom: none;}
+        .blog-list .title {font-size: 1.3rem; color: # 02563eb; text-decoration: none;}
+        .blog-list .meta {font-size: 0.9rem; color: # 0666; margin: 0.3rem 0;}
+        .category {display: inline-block; background: #f3f4f6; padding: 0.1rem 0.6rem; border-radius: 10px; margin-right: 0.5rem;}
+        
+        #blog-detail {display: none;}
+        
+        .back-btn {display: inline-block; margin-bottom: 1rem; color: # 02563eb; text-decoration: none;}
+        .loading {text-align: center; padding: 3rem; color: # 0666;}
+    </style>
 </head>
 
 <body>
-    <div class="container">
-        <header class="header">
-            <div class="header-center">
-                <h1>Blog</h1>
+    <div id="blog-list" class="blog-list"></div>
+    <div id="blog-detail"></div>
+    <div class="loading" id="loading">加载中...</div>
+
+    <script>
+        // ---------- 需要修改的配置 ----------
+        const GITHUB_OWNER = 'wpqppqqy';
+        const GITHUB_REPO = 'wpqppqqy.github.io';
+        // ---------- 配置结束 ----------
+        
+        const loadingEl = document.getElementById('loading');
+        const listEl = document.getElementById('blog-list');
+        const detailEl = document.getElementById('blog-detail');
+        
+        // 分页拉取全部Discussions
+        async function fetchAllDiscussions() {
+          let allDiscussions = [];
+          let hasNextPage = true;
+          let endCursor = null;
+        
+          while (hasNextPage) {
+            const query = `
+              query GetAllDiscussions {
+                repository(owner: "${GITHUB_OWNER}", name: "${GITHUB_REPO}") {
+                  discussions(first: 100, after: ${endCursor ? `"${endCursor}"` : null}, orderBy: {field: CREATED_AT, direction: DESC}) {
+                    nodes {
+                      title
+                      number
+                      bodyHTML
+                      createdAt
+                      category { name }
+                      labels { nodes { name } }
+                    }
+                    pageInfo {
+                      hasNextPage
+                      endCursor
+                    }
+                  }
+                }
+              }
+            `;
+        
+            try {
+              const res = await fetch('https://api.github.com/graphql', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({query})
+              });
+              const result = await res.json();
+              
+              if (!result?.data?.repository?.discussions) break;
+              const {nodes, pageInfo} = result.data.repository.discussions;
+              
+              allDiscussions.push(...nodes);
+              hasNextPage = pageInfo.hasNextPage;
+              endCursor = pageInfo.endCursor;
+            } catch (err) {
+              console.error('拉取失败', err);
+              break;
+            }
+          }
+          return allDiscussions;
+        }
+        
+        // 渲染博客列表
+        function renderList(discussions) {
+          loadingEl.style.display = 'none';
+          listEl.innerHTML = '';
+          discussions.forEach(disc => {
+            const date = new Date(disc.createdAt).toLocaleDateString('zh-CN');
+            const item = document.createElement('div');
+            item.className = 'item';
+            item.innerHTML = `
+              <a href="#${disc.number}" class="title">${disc.title}</a>
+              <div class="meta">
+                <span class="category">${disc.category.name}</span>
+                <span>${date}</span>
+              </div>
+            `;
+            item.querySelector('a').addEventListener('click', (e) => {
+              e.preventDefault();
+              renderDetail(disc);
+              history.pushState(null, '', `#${disc.number}`);
+            });
+            listEl.appendChild(item);
+          });
+        }
+        
+        // 渲染文章详情
+        function renderDetail(disc) {
+          listEl.style.display = 'none';
+          detailEl.style.display = 'block';
+          const date = new Date(disc.createdAt).toLocaleDateString('zh-CN');
+          detailEl.innerHTML = `
+            <a href="#" class="back-btn">← 返回列表</a>
+            <h1>${disc.title}</h1>
+            <div class="meta">
+              <span class="category">${disc.category.name}</span>
+              <span>${date}</span>
             </div>
-        </header>
-        <div id="blog-posts"></div>
-        <canvas id="particleCanvas"></canvas>
-        <footer class="footer">
-            <p><strong>© 2026 奇迹蛋糕. All Rights Reserved.</strong></p>
-        </footer>
-        <script src="../js/blog.js"></script>
-        <script src="../js/particle.js?id=particleCanvas"></script>
+            <div style="margin-top: 1.5rem; line-height: 1.8;">${disc.bodyHTML}</div>
+          `;
+          detailEl.querySelector('.back-btn').addEventListener('click', (e) => {
+            e.preventDefault();
+            detailEl.style.display = 'none';
+            listEl.style.display = 'block';
+            history.pushState(null, '', '#');
+          });
+        }
+        
+        // 初始化页面
+        window.addEventListener('DOMContentLoaded', async () => {
+          const discussions = await fetchAllDiscussions();
+          renderList(discussions);
+        
+          // 处理直接访问锚点的情况
+          const hash = window.location.hash.slice(1);
+          if (hash) {
+            const target = discussions.find(d => d.number === Number(hash));
+            if (target) renderDetail(target);
+          }
+        });
+    </script>
 </body>
 
 </html>
