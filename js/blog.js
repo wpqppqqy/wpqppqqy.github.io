@@ -1,8 +1,10 @@
 const GITHUB_USER = "wpqppqqy";
 const REPO_NAME = "wpqppqqy.github.io";
+const PAGE_SIZE = 10; // 每页显示10篇文章
 const contentEl = document.getElementById('content');
 const backBtn = document.getElementById('backBtn');
 let allPosts;
+let currentPage = 1;
 let githubToken = localStorage.getItem('github_access_token');
 async function fetchAllDiscussions() {
     try {
@@ -72,27 +74,48 @@ async function fetchAllDiscussions() {
         allPosts = allPosts.sort((a, b) =>
             new Date(b.created_at) - new Date(a.created_at)
         );
-        renderPostList();
+        renderPostList(currentPage);
     } catch (err) {
         contentEl.innerHTML = `<div class="post-content">加载博文失败，请检查网络或Token有效性后刷新重试</div>`;
         console.error('加载失败：', err);
     }
 }
 
-function renderPostList() {
+function renderPostList(page) {
     contentEl.innerHTML = '';
     backBtn.style.display = 'none';
-    allPosts.forEach(post => {
+    // 计算分页数据
+    const startIndex = (page - 1) * PAGE_SIZE;
+    const endIndex = startIndex + PAGE_SIZE;
+    const paginatedPosts = allPosts.slice(startIndex, endIndex);
+    const totalPages = Math.ceil(allPosts.length / PAGE_SIZE);
+    paginatedPosts.forEach(post => {
         const postEl = document.createElement('div');
         postEl.className = 'post-item';
         const createDate = new Date(post.created_at).toLocaleString('zh-CN');
         postEl.innerHTML = `
-      <div class="post-title">${post.title}</div>
-      <div class="post-meta">发布于 ${createDate}</div>
-    `;
+            <div class="post-title">${post.title}</div>
+            <div class="post-meta">发布于 ${createDate}</div>
+        `;
         postEl.addEventListener('click', () => renderSinglePost(post));
         contentEl.appendChild(postEl);
     });
+    if (totalPages > 1) {
+        const paginationEl = document.createElement('div');
+        paginationEl.className = 'pagination';
+        paginationEl.innerHTML = `
+            <button ${page === 1 ? 'disabled' : ''} data-page="${page - 1}">上一页</button>
+            <span>第 ${page} / ${totalPages} 页</span>
+            <button ${page === totalPages ? 'disabled' : ''} data-page="${page + 1}">下一页</button>
+        `;
+        contentEl.appendChild(paginationEl);
+        paginationEl.querySelectorAll('button').forEach(btn => {
+            btn.addEventListener('click', function() {
+                currentPage = parseInt(this.dataset.page);
+                renderPostList(currentPage);
+            });
+        });
+    }
 }
 
 function renderComment(comment) {
@@ -135,5 +158,5 @@ function renderSinglePost(post) {
   `;
     backBtn.style.display = 'block';
 }
-backBtn.addEventListener('click', renderPostList);
+backBtn.addEventListener('click', () => renderPostList(currentPage));
 fetchAllDiscussions();

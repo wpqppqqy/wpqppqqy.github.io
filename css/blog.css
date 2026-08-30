@@ -39,6 +39,7 @@
     color: #2d3748;
     cursor: pointer;
     border: none;
+    font-weight: bold;
     text-decoration: underline solid #2d3748;
 }
 
@@ -55,4 +56,28 @@ img.author-avatar {
 
 .comment-item {
     padding: 1vh 3vh;
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid #2d3748;
+}
+
+.pagination button {
+    background: transparent;
+    border: none;
+    font-weight: bold;
+    text-decoration: underline solid #2d3748;
+    padding: 6px 12px;
+    cursor: pointer;
+}
+
+.pagination button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
 }
