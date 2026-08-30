@@ -30,6 +30,10 @@ async function fetchAllDiscussions() {
         }
     });
     allPosts = await res.json();
+    // 按创建时间倒序排序
+    allPosts = allPosts.sort((a, b) =>
+        new Date(b.created_at) - new Date(a.created_at)
+    );
     renderPostList();
 }
 
