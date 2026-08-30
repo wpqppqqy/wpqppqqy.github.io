@@ -1,4 +1,4 @@
-const centerText = document.querySelector('.header-center');
+const centerText = document.querySelector('.header-main');
 const HIDE_THRESHOLD = 60;
 window.addEventListener('scroll', () => {
     const scrollY = window.scrollY;

@@ -14,6 +14,6 @@ window.addEventListener('load', () => {
 function hidePreloader() {
     const preloader = document.getElementById('preloader');
     preloader.classList.add('hidden');
-    setTimeout(() => document.querySelector('.header-center').classList.add('move'), 500);
+    setTimeout(() => document.querySelector('.header-main').classList.add('move'), 500);
     setTimeout(() => preloader.remove(), 500);
 }
