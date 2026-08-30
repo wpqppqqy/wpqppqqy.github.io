@@ -1,48 +1,49 @@
 .post-item {
     padding: 1.5rem;
     margin-bottom: 1.5rem;
-    background: white;
-    border-radius: 8px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    background: transparent;
+    border-radius: 12px;
     cursor: pointer;
-    transition: all 0.2s
+    border: 2px dashed #2d3748;
+    transition: all 0.3s ease;
 }
 
 .post-item:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15)
+    transform: translateY(-6px);
 }
 
 .post-title {
     font-size: 1.3rem;
     font-weight: 600;
     margin-bottom: 0.5rem;
-    color: # 0969da
+    color: #2d3748
 }
 
 .post-meta {
     font-size: 0.9rem;
-    color: # 0656d76;
+    color: #2d3748;
     margin-bottom: 1rem
 }
 
 .post-content {
-    line-height: 1.8
+    line-height: 1.8 color: #2d3748;
+    border-bottom: 2px solid #2d3748;
 }
 
 .back-btn {
+    position: fixed;
+    top: 9vh;
     display: none;
     margin-bottom: 1.5rem;
     padding: 0.5rem 1rem;
-    background: # 0969da;
-    color: white;
+    background: transparent;
+    color: #2d3748;
+    cursor: pointer;
     border: none;
-    border-radius: 6px;
-    cursor: pointer
+    text-decoration: underline solid #2d3748;
 }
 
 .loading {
-    text-align: center;
-    padding: 3rem;
-    color: # 0656d76
+    padding: 0.5rem;
+    color: #2d3748
 }

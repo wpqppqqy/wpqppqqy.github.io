@@ -114,13 +114,14 @@ header.header {
 }
 
 .nav-card {
-    background: #000000;
+    background: transparent;
     border-radius: 12px;
     padding: 24px 20px;
     text-decoration: none;
     color: #2d3748;
+    cursor: pointer;
     transition: all 0.3s ease;
-    border: 1px solid #ffffff;
+    border: 2px dashed #2d3748;
 }
 
 .nav-card:hover {
