@@ -3,23 +3,46 @@ const REPO_NAME = "wpqppqqy.github.io";
 const contentEl = document.getElementById('content');
 const backBtn = document.getElementById('backBtn');
 let allPosts;
+let githubToken = localStorage.getItem('github_access_token');
 async function fetchAllDiscussions() {
     try {
         const apiUrl = `https://api.github.com/repos/${GITHUB_USER}/${REPO_NAME}/discussions?per_page=100&sort=created&direction=desc`;
+        const headers = {
+            "Accept": "application/vnd.github.html+json",
+            ...(githubToken && {
+                "Authorization": `token ${githubToken}`
+            })
+        };
         const res = await fetch(apiUrl, {
-            headers: {
-                "Accept": "application/vnd.github.html+json"
-            }
+            headers
         });
+        if (res.status === 403) {
+            const errData = await res.json();
+            if (/rate limit exceeded/i.test(errData.message)) {
+                const userToken = prompt("GitHub API 请求已达上限，请输入你的Personal Access Token继续使用\nToken不需要额外权限，仅用于提升API请求额度");
+                if (!userToken) {
+                    contentEl.innerHTML = `<div class="post-content">请求已达GitHub API速率限制，请等待一分钟后刷新重试</div>`;
+                    return;
+                }
+                githubToken = userToken.trim();
+                localStorage.setItem('github_access_token', githubToken);
+                return fetchAllDiscussions();
+            }
+        }
         allPosts = await res.json();
         allPosts = await Promise.all(
             allPosts.map(async (post) => {
                 const commentsUrl = `https://api.github.com/repos/${GITHUB_USER}/${REPO_NAME}/discussions/${post.number}/comments?per_page=100&sort=created&direction=desc`;
                 const commentsRes = await fetch(commentsUrl, {
-                    headers: {
-                        "Accept": "application/vnd.github.html+json"
-                    }
+                    headers
                 });
+                if (commentsRes.status === 403) {
+                    const errData = await commentsRes.json();
+                    if (/rate limit exceeded/i.test(errData.message)) {
+                        contentEl.innerHTML = `<div class="post-content">请求已达GitHub API速率限制，请刷新页面重新输入Token</div>`;
+                        throw new Error("Rate limit exceeded");
+                    }
+                }
                 let allComments = await commentsRes.json();
                 const commentMap = {};
                 const topLevelComments = [];
@@ -51,7 +74,7 @@ async function fetchAllDiscussions() {
         );
         renderPostList();
     } catch (err) {
-        contentEl.innerHTML = `<div class="post-content">加载博文失败，请检查网络后刷新重试</div>`;
+        contentEl.innerHTML = `<div class="post-content">加载博文失败，请检查网络或Token有效性后刷新重试</div>`;
         console.error('加载失败：', err);
     }
 }
