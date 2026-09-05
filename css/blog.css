@@ -31,7 +31,7 @@
 
 .back-btn {
     position: fixed;
-    top: 9vh;
+    top: 0;
     display: none;
     margin-bottom: 1.5rem;
     padding: 0.5rem 1rem;
