@@ -94,12 +94,22 @@ function renderPostList(page) {
         postEl.className = 'post-item';
         const createDate = new Date(post.created_at).toLocaleString('zh-CN');
         postEl.innerHTML = `
-            <div class="post-title">${post.title}</div>
-            <div class="post-meta">
-              <img class="author-avatar" src="${post.user.avatar_url}" alt="${post.user.login}">
-              <spon>${post.user.login}</spon>
-              <spon>发布于 ${createDate}</spon>
-            </div>
+        <div class="post-title">
+            <span class="title-post">${post.title}</span>
+            <span class="tip">[${post.category.name}]</span>
+        </div>
+        <div class="post-meta">
+            <span>
+                <img class="author-avatar" src="${post.user.avatar_url}" alt="${post.user.login}">
+            </span>
+            <span>
+                <span>
+                    <span class="tip">[${post.author_association}]</span>
+                    ${post.user.login}
+                </span>
+                <div>发布于 ${createDate}</div>
+            </span>
+        </div>
         `;
         postEl.addEventListener('click', () => renderSinglePost(post));
         contentEl.appendChild(postEl);
@@ -126,12 +136,19 @@ function renderComment(comment) {
     const commentDate = new Date(comment.created_at).toLocaleString('zh-CN');
     let html = `
     <div class="comment-item">
-      <div class="post-meta">
-        <img class="author-avatar" src="${comment.user.avatar_url}" alt="${comment.user.login}">
-        <span>${comment.user.login}</span>
-        <span>${commentDate}</span>
-      </div>
-      <div class="post-content">${comment.body_html}</div>
+        <div class="post-meta">
+            <span>
+                <img class="author-avatar" src="${comment.user.avatar_url}" alt="${comment.user.login}">
+            </span>
+            <span>
+                <span>
+                    <span class="tip">[${comment.author_association}]</span>
+                    ${comment.user.login}
+                </span>
+                <div>${commentDate}</div>
+            </span>
+        </div>
+        <div class="post-content">${comment.body_html}</div>
   `;
     if (comment.children.length > 0) {
         html += `<div class="comments-section"><h4>回复 (${comment.children.length}条)</h4>`;
@@ -152,11 +169,21 @@ function renderSinglePost(post) {
     })
     commentsHtml += `</div>`;
     contentEl.innerHTML = `
-    <h2 class="post-title">${post.title}</h2>
+    <div class="post-title">
+        <span class="title-post">${post.title}</span>
+        <span class="tip">[${post.category.name}]</span>
+    </div>
     <div class="post-meta">
-      <img class="author-avatar" src="${post.user.avatar_url}" alt="${post.user.login}">
-      <span>${post.user.login}</span>
-      <span>发布于 ${createDate}</span>
+        <span>
+            <img class="author-avatar" src="${post.user.avatar_url}" alt="${post.user.login}">
+        </span>
+        <span>
+            <span>
+                <span class="tip">[${post.author_association}]</span>
+                ${post.user.login}
+            </span>
+            <div>发布于 ${createDate}</div>
+        </span>
     </div>
     <div class="post-content">${post.body_html}</div>
     ${commentsHtml}

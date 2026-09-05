@@ -13,13 +13,17 @@
 }
 
 .post-title {
-    font-size: 1.3rem;
     font-weight: 600;
     margin-bottom: 0.5rem;
     color: #ffffff;
 }
 
+.title-post {
+    font-size: 1.3rem;
+}
+
 .post-meta {
+    display: flex;
     font-size: 0.9rem;
     color: #ffffff;
 }
@@ -27,6 +31,11 @@
 .post-content {
     line-height: 1.8 color: #ffffff;
     padding: 1vh;
+}
+
+.tip {
+    font-style: italic;
+    color: #303030
 }
 
 .back-btn {
