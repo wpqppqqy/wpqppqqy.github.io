@@ -98,7 +98,7 @@ function renderPostList(page) {
             <div class="post-meta">
               <img class="author-avatar" src="${post.user.avatar_url}" alt="${post.user.login}">
               <spon>${post.user.login}</spon>
-              <spom>发布于 ${createDate}</spon>
+              <spon>发布于 ${createDate}</spon>
             </div>
         `;
         postEl.addEventListener('click', () => renderSinglePost(post));
