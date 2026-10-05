@@ -1,0 +1,246 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>奇迹蛋糕</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        html {
+            --main-color: #0d1117;
+            --text-color: #f0f6fc;
+            --star-color: #fff8c5;
+            --type-color: #f6f8fa;
+            --header-color: transparent;
+            --footer-color: transparent;
+            --card-border-color: #1f6feb;
+            --card-title-color: #4493f8;
+            --card-text-color: #4493f8;
+            width: 100vw;
+            height: 100vh;
+            background: var(--main-color);
+            color: var(--text-color);
+            font-family: sans-serif;
+            font-size: 16px;
+        }
+        header {
+            position: fixed;
+            width: 100vw;
+            height: 4rem;
+            display: flex;
+            background: var(--header-color);
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+        }
+        .header-center {
+            color: var(--text-color);
+            text-align: center;
+        }
+        .hero {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        #particleCanvas {
+            position: absolute;
+            width: 100vw;
+            height: 100vh;
+        }
+        .typewriter {
+            text-align: center;
+            font-size: 2.5rem;
+            font-weight: 500;
+            max-width: 90vw;
+            color: var(--text-color);
+        }
+        .typewriter::after {
+            content: "|";
+            color: var(--type-color);
+            animation: blink 1s infinite;
+        }
+        .content {
+            display: grid;
+            place-items: center;
+        }
+        .card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 5rem;
+            width: 90vw;
+            border: 0.1rem solid var(--card-border-color);
+            border-radius: 1rem;
+            text-decoration: none;
+        }
+        .card h1 {
+            color: var(--card-title-color);
+        }
+        .card p {
+            color: var(--card-text-color);
+        }
+        footer {
+            position: relative;
+            text-align: center;
+            color: var(--text-color);
+            width: 100vw;
+            height: 4rem;
+            background: var(--footer-color);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        footer.p {
+            white-space: nowrap;
+        }
+        @keyframes blink {
+            0% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0;
+            }
+        }
+        @media (max-width: 768px) {
+            html {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1 class="header-center">奇迹蛋糕</h1>
+    </header>
+    <main>
+        <div class="hero">
+            <div class="typewriter"></div> <canvas id="particleCanvas"></canvas>
+        </div>
+        <div class="content"> <a class="card" href="https://wpqppqqy.github.io/wpqppqqy/">
+                <h1>关于我</h1>
+                <p>站长到底是什么生物</p> </a>
+        </div> </div>
+    </main>
+    <footer>
+        <p>© 2026 <a href="https://wpqppqqy.github.io/">奇迹蛋糕</a>. All Rights Reserved.
+        <p>
+    </footer>
+    <script>
+        const html = document.documentElement;
+        const canvas = document.getElementById('particleCanvas');
+        if (!canvas)
+            throw new Error(`Canvas element not found: ${canvasId}`);
+        const ctx = canvas.getContext('2d');
+        if (!ctx)
+            throw new Error('2D context not available');
+        let DPR = window.devicePixelRatio || 1;
+        function resizeCanvas() {
+            DPR = window.devicePixelRatio || 1;
+            const wCss = window.innerWidth;
+            const hCss = window.innerHeight;
+            canvas.style.width = wCss + 'px';
+            canvas.style.height = hCss + 'px';
+            canvas.width = Math.round(wCss * DPR);
+            canvas.height = Math.round(hCss * DPR);
+            ctx.setTransform(DPR, 0, 0, DPR, 0, 0)
+        }
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+        const maxCount = 100;
+        const speed = 5;
+        const radius = 3;
+        const color = getComputedStyle(html).getPropertyValue('--star-color').trim();
+        ;
+        let w = canvas.width / DPR;
+        let h = canvas.height / DPR;
+        const spawnRange = {
+            min: 100,
+            max: 500
+        };
+        let lastTime = 0;
+        const particles = [];
+        class Particle {
+            constructor() {
+                this.x = w;
+                this.y = (Math.random() - 0.25) * h;
+                this.v = -(Math.random() + 0.5) * speed * 2;
+                this.radius = radius
+            }
+            update() {
+                this.x += this.v;
+                this.y -= this.v
+            }
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                ctx.fillStyle = color;
+                ctx.fill()
+            }
+        }
+        function spawn(timestamp) {
+            const delay = Math.random() * (spawnRange.max - spawnRange.min) + spawnRange.min;
+            if (timestamp - lastTime > delay && particles.length < maxCount) {
+                particles.push(new Particle());
+                lastTime = timestamp
+            }
+        }
+        function loop(timestamp) {
+            w = canvas.width / DPR;
+            h = canvas.height / DPR;
+            ctx.clearRect(0, 0, w, h);
+            spawn(timestamp);
+            for (let i = particles.length - 1; i >= 0; i--) {
+                const p = particles[i];
+                p.update();
+                if (p.x + p.radius < 0) {
+                    particles.splice(i, 1)
+                } else {
+                    p.draw()
+                }
+            }
+            requestAnimationFrame(loop)
+        }
+        loop(0)
+    </script>
+    <script src="slogan.js"></script>
+    <script>
+        const textList = slogan.map(slogan => slogan.trim());
+        const typingSpeed = 50;
+        const deleteSpeed = 50;
+        const pauseTime = 2000;
+        const waitTime = 500;
+        let textIndex = 0;
+        let charIndex = 0;
+        const text = document.querySelector('.typewriter');
+        function typeWriter() {
+            if (charIndex < textList[textIndex].length) {
+                text.textContent += textList[textIndex].charAt(charIndex);
+                charIndex++;
+                setTimeout(typeWriter, typingSpeed)
+            } else {
+                setTimeout(deleteText, pauseTime)
+            }
+        }
+        function deleteText() {
+            if (charIndex > 0) {
+                text.textContent = textList[textIndex].substring(0, charIndex - 1);
+                charIndex--;
+                setTimeout(deleteText, deleteSpeed)
+            } else {
+                textIndex = Number.parseInt(Math.random() * textList.length);
+                setTimeout(typeWriter, waitTime)
+            }
+        }
+        window.onload = typeWriter
+    </script>
+</body>
+</html>
