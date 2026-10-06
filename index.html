@@ -45,7 +45,6 @@
             width: 100vw;
             height: 100vh;
             display: flex;
-            flex-direction: column;
             align-items: center;
             justify-content: center;
         }
@@ -103,10 +102,10 @@
             white-space: nowrap;
         }
         @keyframes blink {
-            0% {
+            0%, 50% {
                 opacity: 1;
             }
-            50% {
+            51%, 100% {
                 opacity: 0;
             }
         }
