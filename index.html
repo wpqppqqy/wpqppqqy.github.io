@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>奇迹蛋糕</title>
+    <link href="min.css" rel="stylesheet">
+    <script src="min.js"></script>
     <style>
         * {
             margin: 0;
@@ -33,13 +35,11 @@
             height: 4rem;
             display: flex;
             background: var(--header-color);
+            color: var(--text-color);
+            text-align: center;
             align-items: center;
             justify-content: center;
             z-index: 10;
-        }
-        .header-center {
-            color: var(--text-color);
-            text-align: center;
         }
         .hero {
             width: 100vw;
@@ -64,6 +64,13 @@
             content: "|";
             color: var(--type-color);
             animation: blink 1s infinite;
+        }
+        .markdown-body {
+            box-sizing: border-box;
+            min-width: 200px;
+            max-width: 980px;
+            margin: 0 auto;
+            padding: 45px;
         }
         .content {
             display: grid;
@@ -99,9 +106,6 @@
             align-items: center;
             justify-content: center;
         }
-        footer.p {
-            white-space: nowrap;
-        }
         @keyframes blink {
             0%, 50% {
                 opacity: 1;
@@ -114,26 +118,21 @@
             html {
                 font-size: 14px;
             }
+            .markdown-body {
+                padding: 15px;
+            }
         }
     </style>
 </head>
 <body>
-    <header>
-        <h1 class="header-center">奇迹蛋糕</h1>
-    </header>
+    <header></header>
     <main>
         <div class="hero">
             <div class="typewriter"></div> <canvas id="particleCanvas"></canvas>
         </div>
-        <div class="content"> <a class="card" href="https://wpqppqqy.github.io/wpqppqqy/">
-                <h1>关于我</h1>
-                <p>站长到底是什么生物</p> </a>
-        </div> </div>
+        <article class="markdown-body"></article>
     </main>
-    <footer>
-        <p>© 2026 <a href="https://wpqppqqy.github.io/">奇迹蛋糕</a>. All Rights Reserved.
-        <p>
-    </footer>
+    <footer></footer>
     <script>
         const html = document.documentElement;
         const canvas = document.getElementById('particleCanvas');
@@ -241,6 +240,26 @@
             }
         }
         window.onload = typeWriter
+    </script>
+    <script>
+        async function go() {
+            document.querySelector('.markdown-body').innerHTML = marked.parse(await(await fetch(new URLSearchParams(location.search).get('md') || 'README.md')).text());
+            document.querySelectorAll('.markdown-body a').forEach(
+                a => {
+                    let h = a.getAttribute('href');
+                    h && /^\/?([\w\u4e00-\u9fa5-\/]+)*\.md$/.test(h) && (a.href = `?md=${encodeURIComponent(h)}`)
+                }
+            )
+        }
+        addEventListener('DOMContentLoaded', go);
+        addEventListener(
+            'click',
+            e => {
+                let a = e.target.closest('a[href^="?md="]');
+                a && (e.preventDefault(), history.pushState({}, '', a.href), go())
+            }
+        );
+        addEventListener('popstate', go);
     </script>
 </body>
 </html>
